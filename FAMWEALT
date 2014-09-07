@@ -1,0 +1,81 @@
+#include<stdio.h>
+float find(int y,float w)
+{
+int temp=y/2;
+int temp1=temp/2;
+if(temp1==0)
+{
+if(y==3)
+return w/4;
+else
+if(y==2)
+return w/2;
+}
+else
+if(temp1*2==temp)
+return find(y/2,w)/2;
+else
+{
+if(temp*2==y)
+return find(y/2,w)/2;
+else
+return find(y/2,w)/4;
+}
+}
+int main()
+{
+int t;
+int x,y,ans;
+float w;
+scanf("%d",&t);
+while(t--)
+{
+scanf("%d%d%f",&x,&y,&w);
+float w1;
+w1=w;
+
+while(1)
+{
+if(x==1)
+break;
+int temp=x/2;
+int temp1=temp/2;
+//printf("x:%d\n",x);
+//printf("x:%d temp:%d temp1:%d\n",x,temp,temp1);
+//if()
+if(temp==1)
+{
+if(temp*2==x)
+w1*=2;
+else
+w1*=4;
+}
+else
+if(temp1*2==temp)
+{
+//printf("left parent so male\n");
+w1=w1*2;
+//printf("lf:%lf\n",w1);
+
+}
+else
+{
+//printf("right parent so male\n");
+if(temp*2==x)
+w1=w1*2;
+else
+w1=w1*4;
+//printf("lf:%lf\n",w1);
+
+}
+x=temp;
+//printf("for %d wealth:%f\n",x,w1);
+}
+//printf("the top most female has a wealth of %f\n",w1);
+
+printf("%f\n",find(y,w1));
+//printf("the top most female has a wealth of %f\n",w1);
+}
+return 0;
+}
+

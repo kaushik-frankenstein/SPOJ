@@ -1,0 +1,46 @@
+#include<iostream>
+#include<queue>
+#include<stdio.h>
+#include<stdlib.h>
+using namespace std;
+int main()
+{
+int f,s,g,u,d,i,j,k,l;
+scanf("%d%d%d%d%d",&f,&s,&g,&u,&d);
+queue<pair<int,int> > p;
+int *check=(int*)calloc(sizeof(int),f+1);
+p.push(make_pair (s,0));
+check[s]=0;
+while(1)
+{
+if(p.empty())
+{
+printf("use the stairs\n");
+break;
+}
+pair<int,int> o=p.front();
+//printf("checking %d %d\n",o.first,o.second);
+p.pop();
+if(o.first==g)
+{
+printf("%d\n",o.second);
+break;
+}
+if(o.first-d>=0&&d!=0&&!check[o.first-d])
+{
+//printf("inserted %d %d\n",o.first-d,o.second+1);
+
+p.push(make_pair (o.first-d,o.second+1));
+check[o.first-d]=o.second+1;
+}
+if(o.first+u<=f&&u!=0&&!check[o.first+u])
+{
+//printf("inserted %d %d\n",o.first+u,o.second+1);
+p.push(make_pair (o.first+u,o.second+1));
+check[o.first+u]=o.second+1;
+}
+} 
+return 0;
+}
+
+

@@ -1,0 +1,80 @@
+#include<iostream>
+#include<queue>
+#include<stdio.h>
+#include<stdlib.h>
+using namespace std;
+
+struct comp
+{
+bool operator()(const pair<int,pair<int,int> >& i,const pair<int,pair<int,int> >& i1)
+{
+return i.first>i1.first;
+}
+};
+int mst(int e1[],int e2[],int w[],int m,int n)
+{
+priority_queue<pair<int,pair<int,int> >,vector<pair<int,pair<int,int> > >,comp> p;
+int i;
+vector<pair<int,int> > v[n+1];
+for(i=0;i<m;i++)
+{
+v[e1[i]].push_back(make_pair(e2[i],w[i]));
+v[e2[i]].push_back(make_pair(e1[i],w[i]));
+}
+int *check=(int*)calloc(sizeof(int),n+1);
+//check[e1[0]]=1;
+p.push(make_pair(w[0],make_pair (e1[0],e2[0])));
+int cost=0,count=0;
+int c_v=e1[0];
+check[c_v]=1;
+while(1)
+{
+int ans=1;
+int j;
+for(j=0;j<v[c_v].size()&&ans;j++)
+{
+pair<int,int> t=v[c_v][j];
+if(!check[t.first])
+{
+//printf("inserted %d %d %d\n",c_v,t.first,t.second);
+p.push(make_pair(t.second,make_pair(c_v,t.first)));
+}
+}
+pair<int,pair<int,int> > o=p.top();
+p.pop();
+pair<int,int> o1=o.second;
+c_v=o1.second;
+//printf("popped %d %d %d\n",o1.first,o1.second,o.first);
+if(check[c_v]==1)
+ans=0;
+else
+{
+check[c_v]=1;
+count++;
+//printf("checked %d\n",c_v);
+cost+=o.first;
+//printf("cost:%d\n",cost);
+}
+if(count==n-1)
+break;
+
+}
+return cost;
+}
+int main()
+{
+int n,m,i,pr,t;
+scanf("%d",&t);
+while(t--)
+{
+scanf("%d%d%d",&pr,&n,&m);
+int e1[m],e2[m],w[m];
+for(i=0;i<m;i++)
+scanf("%d%d%d",&e1[i],&e2[i],&w[i]);
+long long int ans=mst(e1,e2,w,m,n);
+printf("%lld\n",ans*pr);
+}
+return 0;
+//scanf("%d",&n);
+}
+

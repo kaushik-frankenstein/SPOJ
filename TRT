@@ -1,0 +1,89 @@
+#include<stdio.h>
+#include<stdlib.h>
+int dp(int a[],int n)
+{
+int* *sum=(int**)calloc(sizeof(int),n);
+int* *ans=(int**)calloc(sizeof(int),n);
+int i=0,j,k,l,m;
+
+for(i=0;i<n;i++)
+{
+sum[i]=(int*)calloc(sizeof(int),n-i);
+ans[i]=(int*)calloc(sizeof(int),n-i);
+}
+//int sum[n][n],ans[n][n];
+for(i=0;i<n;i++)
+{
+sum[i][i-i]=a[i];
+ans[i][i-i]=a[i];
+//for(j=0;)
+}
+int gap;
+for(i=0;i<n-1;i++)
+{
+if(a[i]<a[i+1])
+{
+ans[i][1]=a[i]+a[i+1]*2;
+sum[i][1]=a[i]+a[i+1];
+
+}
+else
+{
+ans[i][1]=a[i+1]+a[i]*2;
+sum[i][1]=a[i]+a[i+1];
+
+}
+//printf("sum[%d][%d]:%d\n",i,i+1,sum[i][i+1]);
+//ans[i][i+1]=min()
+}
+//int k=0;
+for(gap=2;gap<n;gap++)
+{
+k=0;
+//printf("");
+for(i=0;i<n-gap;i++)
+{
+k++;
+//printf("ans[%d][%d]:%d sum[%d][%d]:%d\n",i+1,gap-1,ans[i+1][gap-1],i+1,gap-1,sum[i+1][gap-1]);
+int n1=a[i]+ans[i+1][gap-1]+sum[i+1][gap-1];
+//printf("ans:%d sum:%d\n",ans[i][gap-1],sum[i][gap-1]);
+//printf("ans[%d][%d]:%d sum[%d][%d]:%d\n",i,gap-2,ans[i][gap-2],i,gap-2,sum[i][gap-2]);
+
+int n2=a[i+gap]+ans[i][gap-1]+sum[i][gap-1];
+//printf("i:%d i+j:%d n1:%d n2:%d\n",i,i+gap,n1,n2);
+if(n1>n2)
+{
+//printf("took 1()\n");
+ans[i][gap]=n1;
+//printf("");
+sum[i][gap]=sum[i+1][gap-1]+sum[i][0];
+}
+else
+{
+//printf("took ()1");
+ans[i][gap]=n2;
+//printf("sum[%d][%d]:%d\n",i,gap-1,sum[i][gap-1]);
+sum[i][gap]=sum[i][gap-1]+sum[i+gap][0];
+}
+//printf("ans[%d][%d]:%d sum[%d][%d]:%d\n",i,gap,ans[i][gap],i,gap,sum[i][gap]);
+//printf("sum[%d][%d]:%d\n",i,i+gap,sum[i][i+gap]);
+
+}
+}
+return ans[0][n-1];
+}
+int main()
+{
+int n;
+scanf("%d",&n);
+int a[n];
+int i;
+for(i=0;i<n;i++)
+scanf("%d",&a[i]);
+printf("%d\n",dp(a,n));
+//scanf("%d",&n);
+return 0;
+}
+
+
+

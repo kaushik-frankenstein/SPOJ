@@ -1,0 +1,72 @@
+#include<iostream>
+#include<stdio.h>
+using namespace std;
+typedef struct trie
+{
+int num;
+int flag;
+trie *next[10];
+trie(int n)
+{
+num=n;
+flag=1;
+next[0]=next[1]=next[2]=next[3]=next[4]=next[5]=next[6]=next[7]=next[8]=next[9]=0;
+}
+};
+//trie *base[10];
+int main()
+{
+int t,n,i,j;
+char a[20];
+scanf("%d",&t);
+while(t--)
+{
+trie *base=new trie(0);
+
+scanf("%d",&n);
+int count=0;
+trie *trav=base,*trav1;
+int ans=1;
+for(i=0;i<n;i++)
+{
+count=0;
+scanf("%s",a);
+j=0;
+trav=base;
+//if(trav->next)
+for(j=0;a[j]!='\0'&&ans;j++)
+{
+if(trav->next[a[j]-48]==0)
+{
+//printf("no previous element\n");
+struct trie *t=new trie(a[j]-48);
+trav->next[a[j]-48]=t;
+trav1=trav;
+trav=trav->next[a[j]-48];
+}
+else
+{
+//printf("previous element\n");
+count++;
+//printf("count:%d j:%d\n",count,j);
+//printf("flag:%d\n",trav->flag);
+if(count==j+1&&trav->flag==0)
+ans=0;
+trav1=trav;
+trav=trav->next[a[j]-48];
+}
+}
+trav1->flag=0;
+//printf("count:%d j:%d\n",count,j);
+if(count==j)
+ans=0;
+//printf("NO\n");
+}
+if(ans)
+printf("YES\n");
+else
+printf("NO\n");
+}
+return 0;
+}
+

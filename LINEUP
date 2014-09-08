@@ -1,0 +1,50 @@
+#include<stdio.h>
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+int maxi=0;
+int dp(int a[11][11],int j,int mask,int sum)
+{
+//    printf("j:%d\n",j);
+if(j==11)
+{
+if(sum>maxi)
+maxi=sum;
+//printf("sum:%d\n",sum);
+return 0;
+}
+else
+{
+for(int i=1;i<=11;i++)
+{
+if(a[i-1][j]!=0&&!(1<<i&mask))
+{
+sum+=a[i-1][j];
+int mask1=mask;
+mask=mask|1<<i;
+dp(a,j+1,mask,sum);
+sum-=a[i-1][j];
+mask=mask1;
+}
+}
+}
+return maxi;
+}
+int main()
+{
+int t;
+int i,j,k,l;
+scanf("%d",&t);
+while(t--)
+{
+int a[11][11];
+maxi=0;
+for(i=0;i<11;i++)
+{
+for(j=0;j<11;j++)
+scanf("%d",&a[i][j]);
+}
+
+printf("%d\n",dp(a,0,1<<12,0));
+}
+}

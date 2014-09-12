@@ -1,0 +1,73 @@
+//1D KNAPSACK
+//maintain two states for every bag sizef lesser than limit
+//one involving the i-1th pick and another without it
+//if j-a[i] does not involve i-1th element then take the maximum value 
+
+#include<stdio.h>
+#include<iostream>
+//#include<pair>
+using namespace std;
+int max(int i,int j)
+{
+if(i>j)
+return i;
+else
+return j;
+}
+int dp(int a[],int n,int lim)
+{
+int i,j,k,l;
+pair<int,pair<int,int> > p[lim+1];
+//cout<<p[lim].first<<endl;
+for(i=0;i<n;i++)
+{
+for(j=lim;j>=a[i];j--)
+{
+if(p[j-a[i]].first==0||(i-1>=0&&j-a[i]<a[i-1]))
+{
+int inter=max(p[j-a[i]].second.first,p[j-a[i]].second.second);
+int inter1=max(p[j].second.first,p[j].second.second);
+if(inter1<inter+a[i])
+{
+p[j].first=1;
+p[j].second.first=inter+a[i];
+p[j].second.second=inter1;
+}
+else
+p[j].first=0;
+}
+else
+{
+int inter1=max(p[j].second.first,p[j].second.second);
+if(p[j-a[i]].second.second+a[i]>inter1)
+{
+p[j].first=1;
+p[j].second.first=p[j-a[i]].second.second+a[i];
+p[j].second.second=inter1;
+}
+else
+p[j].first=0;
+}
+}
+}
+return max(p[lim].second.first,p[lim].second.second);
+//return ans[lim];
+}
+int main()
+{
+int t;
+int n,lim,i,j,k,l;
+int scene=1;
+scanf("%d",&t);
+while(t--)
+{
+scanf("%d%d",&n,&lim);
+int a[n];
+for(i=0;i<n;i++)
+scanf("%d",&a[i]);
+printf("Scenario #%d: %d\n",scene,dp(a,n,lim));
+scene++;
+}
+return 0;
+}
+

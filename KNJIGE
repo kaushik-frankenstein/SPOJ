@@ -1,0 +1,25 @@
+#include<stdio.h>
+int main()
+{
+int t;
+scanf("%d",&t);
+while(t--)
+{
+int n,count=0;
+scanf("%d",&n);
+int a[n];
+int i,j;
+for(i=0;i<n;i++)
+scanf("%d",&a[i]);
+int offset=0;
+for(i=n-1;i>=0;i--)
+{
+if(1+i+count>a[i])
+{
+count++;
+}
+}
+printf("%d\n",count);
+}
+return 0;
+}

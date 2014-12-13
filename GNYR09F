@@ -1,0 +1,25 @@
+#include<stdio.h>
+long long int a[1000][100];
+int main()
+{
+a[0][0]=1;
+a[1][0]=2;
+int i,j;
+for(i=2;i<=100;i++)
+for(j=0;j<i;j++)
+{
+if(j==0)
+a[i][j]=a[i-1][j]+a[i-2][j];
+else
+a[i][j]=a[i-1][j]+a[i-1][j-1]-a[i-2][j-1]+a[i-2][j];
+}
+int p;
+scanf("%d",&p);
+while(p--)
+{
+int c,n,k;
+scanf("%d%d%d",&c,&n,&k);
+printf("%d %lld\n",c,a[n][k]);
+}
+return 0;
+}

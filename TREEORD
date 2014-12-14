@@ -1,0 +1,96 @@
+#include<stdio.h>
+struct node
+{
+int ele;
+node *l,*r;
+node(int i)
+{
+ele=i;
+l=r=0;
+}
+};
+node* constr(int in[],int post[],int n)
+{
+node* stack[n+1];//=(node*)calloc(sizeof(node),n);
+//stack[0]=0;
+for(int h=0;h<n+1;h++)
+stack[h]=0;
+int inin=0,postin=0,stackin=1,i,j,k;
+while(inin<n&&postin<n)
+{
+node* temp=new node(in[inin]);
+//printf("temp:%d temp->ele:%d\n",temp,temp->ele);
+//if(post[postin]==in[inin]&&stack[stackin]==post[postin])
+if(post[postin]==in[inin])
+{
+temp->l=stack[stackin];
+stack[stackin]=temp;
+//printf("root of stack[%d] is %d\n",stackin,stack[stackin]->ele);
+//printf("hi");
+inin++;
+postin++;
+//printf("%d\n",stackin);
+
+while(stackin!=1&&post[postin]==stack[stackin-1]->ele)
+{
+//printf("merging %d and %d\n",stack[stackin]->ele,stack[stackin-1]->ele);
+//printf("%d\n",stackin);
+stack[stackin-1]->r=stack[stackin];
+stack[stackin]=0;
+stackin--;
+postin++;
+}
+}
+else
+{
+temp->l=stack[stackin];
+stack[stackin]=temp;
+//printf("root of stack[%d] is %d\n",stackin,stack[stackin]->ele);
+stackin++;
+inin++;
+}
+}
+//printf("stackind:%d\n",stackin);
+return stack[1];
+}
+int inord(node* p,int pre[])
+{
+static int count=0;
+//printf("%d\n",p);
+//Sleep(1000);
+if(p)
+{
+if(pre[count++]!=p->ele)
+return 0;
+//printf("p:%d p->ele:%d\n",p,p->ele);
+
+inord(p->l,pre);
+
+inord(p->r,pre);
+}
+return 1;
+}
+int main()
+{
+node *p;
+int n,i,j,k,ans;
+scanf("%d",&n);
+int pre[n],in[n],post[n];
+for(i=0;i<n;i++)
+scanf("%d",&pre[i]);
+for(i=0;i<n;i++)
+scanf("%d",&post[i]);
+for(i=0;i<n;i++)
+scanf("%d",&in[i]);
+p=constr(in,post,n);
+//printf("p->ele:%d\n",p->ele);
+ans=inord(p,pre);
+if(ans)
+printf("yes\n");
+else
+printf("no\n");
+
+return 0;
+}
+
+

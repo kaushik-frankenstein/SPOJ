@@ -1,0 +1,73 @@
+#include<stdio.h>
+long long int count;
+int merge_sort(int arr[],int low,int mid,int high,int stat)
+{
+//static int count=0;
+if(stat==1)
+printf("%lld\n",count);
+else
+{
+//count=0;
+int a[high-low+2];
+int larr=mid-low+1;
+int rarr=high-mid;
+int i,j=low,k=mid+1;
+for(i=0;(i<high-low+2)&&(j<=mid)&&(k<=high);i++)
+{
+if(arr[j]<=arr[k])
+a[i]=arr[j++];
+else
+{
+a[i]=arr[k];
+count=count+(mid-j)+1;
+//printf("mid-j:%d\n",mid-j);
+k++;
+}
+}
+for(;i<(high-low+1)&&j<=mid;i++)
+a[i]=arr[j++];
+for(;i<(high-low+1)&&k<=high;i++)
+{
+a[i]=arr[k++];
+//count++;
+}
+k=0;
+for(i=low;i<=high;i++)
+arr[i]=a[k++];
+}
+}
+void merge(int arr[],int low,int high)
+{
+if(low<high)
+{
+int mid=(low+high)/2;
+merge(arr,low,mid);
+merge(arr,mid+1,high);
+//printf("low:%d mid:%d high:%d\n",low,mid,high);
+merge_sort(arr,low,mid,high,0);
+//printf("count:%d\n",count);
+}
+}
+int main()
+{
+int a[200001];
+int n,i,t;
+//int count=0;
+scanf("%d",&t);
+while(t--)
+{
+scanf("%d",&n);
+for(i=0;i<n;i++)
+scanf("%d",&a[i]);//a[count++]=n;
+count=0;
+merge(a,0,n-1);
+merge_sort(a,0,5,n-1,1);
+/*for(i=0;i<n;i++)
+printf("%d ",a[i]);
+printf("\n");*/
+}
+return 0;
+//scanf("%d",&n);
+}
+
+

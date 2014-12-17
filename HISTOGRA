@@ -1,0 +1,133 @@
+#include<stdio.h>
+#include<iostream>
+#include<Windows.h>
+#include<stdlib.h>
+using namespace std;
+struct node
+{
+long long int value;
+node *r;
+node *l;
+int index;
+node()
+{
+r=0;
+l=0;
+}
+node(long long int i,int in)
+{
+value=i;
+r=0;
+l=0;
+index=in;
+}
+};
+int n;
+node* cons(long long int a[],int low,int high)
+{
+if(low==high)
+{
+return new node(a[low],low);
+}
+else
+{
+node *u=new node();
+int mid=(low+high)/2;
+u->l=cons(a,low,mid);
+u->r=cons(a,mid+1,high);
+if(u->l->value<u->r->value)
+{
+u->value=u->l->value;
+u->index=u->l->index;
+}
+else
+{
+u->value=u->r->value;
+u->index=u->r->index;
+
+}
+return u;
+}
+}
+node* inter(node *root,int low,int high,int l1,int h1)
+{
+if(l1==low&&h1==high)
+{
+return root;
+}
+else
+{
+int mid=(low+high)/2;
+if(l1>mid)
+return inter(root->r,mid+1,high,l1,h1);
+else
+if(h1<=mid)
+return inter(root->l,low,mid,l1,h1);
+else
+{
+node *le;
+node *re;
+long long int cost1,cost2;
+le=inter(root->l,low,mid,l1,mid);
+re=inter(root->r,mid+1,high,mid+1,h1);
+cost1=le->value;
+cost2=re->value;
+if(cost1<cost2)
+{
+return le;
+}
+else
+{
+return re;
+}
+}
+}
+}
+long long int ans1;
+int findMin(node *root,int low,int high,long long int a[])
+{
+long long int are;
+if(low>high)
+return -1;
+else
+if(low==high)
+{
+are=1*a[low];
+if(are>ans1)
+ans1=are;
+return -1;
+}
+node *t=inter(root,0,n-1,low,high);
+are=t->value;
+are*=(high-low+1);
+if(are>ans1)
+ans1=are;
+return t->index;
+}
+int ans(node *root,int low,int high,long long int a[])
+{
+int ind=findMin(root,low,high,a);
+if(ind!=-1)
+{
+ans(root,low,ind-1,a);
+
+ans(root,ind+1,high,a);
+}
+}
+int main()
+{
+scanf("%d",&n);
+while(n)
+{
+long long int a[n];
+int i;
+for(i=0;i<n;i++)
+scanf("%lld",&a[i]);
+node *root=cons(a,0,n-1);
+ans1=0;
+ans(root,0,n-1,a);
+printf("%lld\n",ans1);
+scanf("%d",&n);
+}
+return 0;
+}

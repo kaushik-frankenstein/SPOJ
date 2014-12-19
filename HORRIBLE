@@ -1,0 +1,139 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<cstring>
+long long int max(long long int i,long long int j)
+{
+return i>j?i:j;
+}
+using namespace std;
+long long int arr[400002+100];
+long long int updates[400002+100];
+long long int query(long long int low,long long int high,long long int p,long long int q,long long int node)
+{
+//printf("low:%d high:%d\n",low,high);
+//printf("node:%d\n",node);
+if(p==low&&q==high)
+{
+arr[node]+=updates[node]*(high-low+1);
+if(p!=q)
+{
+updates[node*2]+=updates[node];
+updates[node*2+1]+=updates[node];
+}
+updates[node]=0;
+//printf("returning %lld\n",arr[node]);
+return arr[node];
+}
+if(updates[node])
+{
+updates[node*2]+=updates[node];
+updates[node*2+1]+=updates[node];
+arr[node]+=(high-low+1)*updates[node];
+//printf("transferring updates:%lld\n",updates[node]);
+updates[node]=0;
+}
+if(p<=q)
+{
+int mid=(low+high)/2;
+if(p>=low&&q<=mid)
+return query(low,mid,p,q,node*2);
+else
+if(p>mid&&q<=high)
+{
+return query(mid+1,high,p,q,node*2+1);
+
+}
+else
+if(p>=low&&q>mid)
+{
+return query(low,mid,p,mid,node*2)+query(mid+1,high,mid+1,q,node*2+1);
+}
+}
+}
+long long int update(long long int low,long long int high,long long int p,long long int q,long long int node,long long int v)
+{
+/*printf("low:%d high:%d\n",low,high);
+printf("p:%d q:%d\n",p,q);
+printf("node:%d\n",node);
+*/if(p==low&&q==high)
+{
+updates[node]+=v;
+//printf("arr[%d]:",node);
+//printf("%lld\n",arr[node]);
+arr[node]+=(high-low+1)*updates[node];
+//printf("updates[node]:%lld\n",updates[node]);
+//printf("arr[node]:%lld\n",arr[node]);
+if(p!=q)
+{
+updates[node*2]+=updates[node];
+updates[node*2+1]+=updates[node];
+}
+updates[node]=0;
+return 0;
+}
+if(updates[node])
+{
+updates[node*2]+=updates[node];
+updates[node*2+1]+=updates[node];
+arr[node]+=(high-low+1)*updates[node];
+/*printf("arr[%d]:",node);
+printf("%lld\n",arr[node]);
+printf("transerring updates\n");
+*/updates[node]=0;
+}
+arr[node]+=(q-p+1)*v;
+if(p<=q)
+{
+int mid=(low+high)/2;
+if(p>=low&&q<=mid)
+update(low,mid,p,q,node*2,v);
+else
+if(p>mid&&q<=high)
+update(mid+1,high,p,q,node*2+1,v);
+else
+if(p>=low&&q>mid)
+{
+update(low,mid,p,mid,node*2,v);
+update(mid+1,high,mid+1,q,node*2+1,v);
+}
+//printf("node value:%d\n",node);
+//arr[node]=max(arr[node],arr[node*2]+arr[1+node*2]);
+return 1;
+}
+return 1;
+}
+
+int main()
+{
+int t;
+int n;
+scanf("%d",&t);
+while(t--)
+{
+memset(arr,0,sizeof(arr));
+memset(updates,0,sizeof(updates));
+
+scanf("%d",&n);
+int quer;
+scanf("%d",&quer);
+int stat;
+long long int p,q,v;
+while(quer--)
+{
+scanf("%d",&stat);
+if(stat==0)
+{
+scanf("%lld%lld%lld",&p,&q,&v);
+update(1,n,p,q,1,v);
+//printf("max:%d\n",max);
+}
+else
+{
+scanf("%lld%lld",&p,&q);
+printf("%lld\n",query(1,n,p,q,1));
+}
+}
+}
+return 0;
+}
+

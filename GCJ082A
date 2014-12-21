@@ -31,18 +31,6 @@ l=0;
 
 }
 };
-struct bf
-{
-node *poi;
-int exp;
-int cost;
-bf(node *t,int cost1,int exp1)
-{
-poi=t;
-cost=cost1;
-exp=exp1;
-}
-};
 int one(node *t)
 {
 if(t->g==1)

@@ -1,0 +1,176 @@
+#include<stdio.h>
+#include<iostream>
+#include<algorithm>
+#include<queue>
+#define INF 10000
+using namespace std;
+struct node
+{
+int value;
+int c;
+int g;
+node *r;
+node *l;
+int cost[2];
+node(int ele)
+{
+value=ele;
+c=-1;
+g=-1;
+r=0;
+l=0;
+cost[value]=0;
+cost[!value]=INF;
+}
+node(int g1,int c1)
+{
+g=g1;
+c=c1;
+r=0;
+l=0;
+
+}
+};
+struct bf
+{
+node *poi;
+int exp;
+int cost;
+bf(node *t,int cost1,int exp1)
+{
+poi=t;
+cost=cost1;
+exp=exp1;
+}
+};
+int one(node *t)
+{
+if(t->g==1)
+{
+int cost1=t->l->cost[1]+t->r->cost[1];
+if(t->c==1)
+{
+int cost2=t->l->cost[0]+t->r->cost[1]+1;
+int cost3=t->l->cost[1]+t->r->cost[0]+1;
+return min(cost1,min(cost2,cost3));
+}
+else
+return cost1;
+}
+else
+{
+int cost1=t->l->cost[0]+t->r->cost[1];
+int cost2=t->l->cost[1]+t->r->cost[0];
+int cost3=t->l->cost[1]+t->r->cost[1];
+if(t->c==1)
+return min(cost1,min(cost2,cost3));
+else
+return min(cost1,min(cost2,cost3));
+}
+}
+int zero(node *t)
+{
+if(t->g==1)
+{
+int cost1=t->l->cost[0]+t->r->cost[1];
+int cost2=t->l->cost[1]+t->r->cost[0];
+int cost3=t->l->cost[0]+t->r->cost[0];
+return min(cost1,min(cost2,cost3));
+}
+else
+{
+int cost1=t->l->cost[0]+t->r->cost[0];
+if(t->c==1)
+{
+int cost2=t->l->cost[0]+t->r->cost[1]+1;
+int cost3=t->l->cost[1]+t->r->cost[0]+1;
+return min(cost1,min(cost2,cost3));
+}
+else
+return cost1;
+}
+}
+int cons(pair<int,int> p[],int con,node *root,int lea[],int le)
+{
+int i;
+int index=1;
+queue<node *> q;
+q.push(root);
+while(!q.empty()&&index-con<le)
+{
+node *temp=q.front();
+q.pop();
+node *lef=0;
+node *rig=0;
+if(index<con)
+{
+lef=new node(p[index].first,p[index].second);
+q.push(lef);
+}
+else
+if(index-con<le)
+{
+lef=new node(lea[index-con]);
+q.push(lef);
+}
+if(index+1<con)
+{
+rig=new node(p[index+1].first,p[index+1].second);
+q.push(rig);
+}
+else
+if(index-con+1<le)
+{
+rig=new node(lea[index-con+1]);
+//printf("leaf %d to the right of %d %d\n",lea[index-con+1],temp->g,temp->c);
+q.push(rig);
+}
+temp->l=lef;
+temp->r=rig;
+index+=2;
+}
+}
+int pre(node *root,int lea[],int con)
+{
+if(root->g==-1)
+return 1;
+static int index=0;
+if(root!=0)
+{
+pre(root->l,lea,con);
+pre(root->r,lea,con);
+root->cost[0]=zero(root);
+root->cost[1]=one(root);
+}
+}
+int main()
+{
+int t;
+scanf("%d",&t);
+int case1=1;
+while(t--)
+{
+int m,v;
+scanf("%d%d",&m,&v);
+int con=(m-1)/2;
+int i;
+pair<int,int> g[con];
+node *root;
+for(i=0;i<con;i++)
+scanf("%d%d",&g[i].first,&g[i].second);
+root=new node(g[0].first,g[0].second);
+con=(m+1)/2;
+int lea[con];
+for(i=0;i<con;i++)
+scanf("%d",&lea[i]);
+cons(g,(m-1)/2,root,lea,con);
+
+pre(root,lea,con);
+if(root->cost[v]>=10000)
+printf("Case #%d: IMPOSSIBLE\n",case1);
+else
+printf("Case #%d: %d\n",case1,root->cost[v]);
+case1++;
+}
+return 0;
+}

@@ -1,0 +1,84 @@
+#include<stdio.h>
+#include<iostream>
+#include<vector>
+using namespace std;
+vector<char > v[10005];
+int c[10005];
+struct node
+{
+char c;
+node *r;
+node *l;
+node(char c1)
+{
+r=0;
+l=0;
+c=c1;
+}
+};
+int maxlevel=0;
+int com(node *t,int level,int case1)
+{
+if(t==0)
+return 0;
+if(v[level].size()==0||c[level]!=case1)
+{
+c[level]=case1;
+v[level].erase(v[level].begin(),v[level].end());
+}
+if(level>maxlevel)
+maxlevel=level;
+v[level].push_back(t->c);
+com(t->r,level+1,case1);
+com(t->l,level+1,case1);
+}
+int index2=-1;
+node* con(char a[],int n)
+{
+index2++;
+node* t1=new node(a[index2]);
+while(a[index2+1]>91)
+{
+node* t=con(a,n);
+t->l=t1;
+
+t1=t;
+if(index2+1>n-1)
+return t1;
+}
+if(index2+1<n)
+{
+node* t2=new node(a[index2+1]);
+t2->r=t1;
+index2++;
+return t2;
+}
+}
+int main()
+{
+int t;
+scanf("%d",&t);
+int case1=1;
+while(t--)
+{
+node *root;
+char a[20001];
+scanf("%s",a);
+int n=strlen(a);
+index2=-1;
+root=con(a,n);
+maxlevel=0;
+com(root,0,case1);
+int i;
+for(i=maxlevel;i>=0;i--)
+{
+int j;
+int n1=v[i].size();
+for(j=0;j<n1;j++)
+printf("%c",v[i][j]);
+}
+printf("\n");
+case1++;
+}
+return 0;
+}

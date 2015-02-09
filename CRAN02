@@ -1,0 +1,53 @@
+#include<stdio.h>
+#include<iostream>
+#include<map>
+using namespace std;
+int find(map<int,int> p,int k)
+{
+if(p.find(k)!=p.end())
+return p[k];
+else
+return 0;
+}
+int main()
+{
+int t;
+scanf("%d",&t);
+while(t--)
+{
+map<int,int> pos;
+map<int,int> neg;
+
+int n;
+scanf("%d",&n);
+int ele,sum=0;
+int i;
+int set=0;
+long long int count=0;
+
+pos[0]=1;
+for(i=0;i<n;i++)
+{
+                scanf("%d",&ele);
+                sum+=ele;
+                
+                if(sum>=0)
+                {
+                         count+=pos[sum];
+                         pos[sum]++;
+                 
+                }
+                else
+                if(sum<0)
+                {
+                         count+=neg[sum];
+                        neg[sum]++;
+                 
+                }
+         //       printf("count:%d\n",count);
+}
+printf("%lld\n",count);
+
+}
+return 0;
+}

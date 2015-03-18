@@ -1,0 +1,56 @@
+#include<stdio.h>
+int max(int i,int j)
+{
+	return i>j?i:j;
+}
+int ans[101][101][101];
+char a[101],a1[101];
+int n,n1,answ=0;
+int cal(int k)
+{
+  int lcs,i,j;
+  for(lcs=0;lcs<k;lcs++)
+  {
+  	for(i=lcs;i<n;i++)
+  	{
+  		for(j=lcs;j<n1;j++)
+  		{
+  		  ans[lcs][i][j]=0;
+  		  if(a[i]==a1[j])
+  		  {
+  		  	if((lcs-1>=0)&&(j-1)>=0&&(i-1)>=0&&(ans[lcs-1][i-1][j-1]!=0))
+  		  		ans[lcs][i][j]+=ans[lcs-1][i-1][j-1]+a[i];
+  		  	else
+  		  		if(lcs==0)
+  		  			ans[lcs][i][j]=a[i];
+  		  }
+  		  if(i-1>=lcs)
+  		 ans[lcs][i][j]=max(ans[lcs][i][j],ans[lcs][i-1][j]);
+  		if(j-1>=lcs)
+  		 ans[lcs][i][j]=max(ans[lcs][i][j],ans[lcs][i][j-1]);
+  //		 printf("ans[%d][%d][%d]:%d\n",lcs,i,j,ans[lcs][i][j]);
+  		 if(lcs==k-1)
+  		 	answ=max(answ,ans[lcs][i][j]);
+  		}
+  	}
+  }
+
+}
+int main()
+{
+  int t;
+  scanf("%d",&t);
+  while(t--)
+  {
+  	int k;
+    scanf("%s",a);
+    scanf("%s",a1);
+    scanf("%d",&k);
+    n=strlen(a);
+    n1=strlen(a1);
+    answ=0;
+    cal(k);
+    printf("%d\n",answ);
+  }
+  return 0;
+}

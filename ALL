@@ -1,0 +1,92 @@
+#include<stdio.h>
+#include<algorithm>
+#include<iostream>
+#include<deque>
+#include<vector>
+using namespace std;
+int main()
+{
+    int n1,n2,d;
+    scanf("%d%d%d",&n1,&n2,&d);
+    while(n1+n2+d)
+    {
+    	int* count2=(int*)calloc(sizeof(int),n1+n2+4);
+    	    	int* count=(int*)calloc(sizeof(int),n1+n2+2);
+
+    	deque<pair<int,int> > q;
+        vector<int> v[n1+n2+1];
+    	int i;
+    	for(i=0;i<d;i++)
+    	{
+    		int ele1,ele2;
+    		scanf("%d%d",&ele1,&ele2);
+    		v[ele2].push_back(ele1);
+    		count2[ele1]++;
+    		count[ele1]++;
+    	}
+    	int i3;
+    	int ans[2];
+    	count[0]=0;
+    	for(i3=0;i3<2;i3++)
+    	{
+    	for(i=1;i<=n1+n2;i++)
+    	{
+    		if(count[i]!=0)
+    			continue;
+    		if(i<=n1)
+    			q.push_back(make_pair (1,i));
+    		else
+    		{
+                if(i3==0)
+    			q.push_back(make_pair(2,i));
+    			else
+    			q.push_front(make_pair(2,i));
+            }
+    	}
+    	int count1=2;
+    	pair<int,int> p;
+    	p.first=-1;
+    	p.second=-1;
+    	while(!q.empty())
+    	{
+    		if(p.first==-1)
+    		{
+        		p=q.front();
+    		}
+    		else
+    		{
+    			if(p.first!=q.front().first)
+    			  count1++;
+    			 p=q.front();
+    		}
+    		q.pop_front();
+    		int n=v[p.second].size();
+    		for(i=0;i<n;i++)
+    		{
+    			count[v[p.second][i]]--;
+    			if(count[v[p.second][i]]==0)
+    			{
+    				pair<int,int> p1;
+    				p1.second=v[p.second][i];
+    				if(v[p.second][i]<=n1)
+    					p1.first=1;
+    				else
+    					p1.first=2;
+    				if(p1.first==p.first)
+    					q.push_front(p1);
+    				else
+    					q.push_back(p1);
+    				count[v[p.second][i]]=count2[v[p.second][i]];
+    			}
+    		}
+
+    	}
+    	ans[i3]=count1;
+    	
+     }
+    	printf("%d\n",min(ans[0],ans[1]));
+    	scanf("%d%d%d",&n1,&n2,&d);
+
+    }
+	return 0;
+}

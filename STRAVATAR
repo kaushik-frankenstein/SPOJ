@@ -1,0 +1,86 @@
+#include<stdio.h>
+
+	char a[1000001];
+	char a1[1000001];
+	int lazy[100000000];
+	int n,m;
+	int answ;
+
+int update(int low,int high,int low1,int high1,int node)
+{
+//	printf("%d\n",node);
+//	printf("low:%d high:%d low1:%d high1:%d node:%d\n",low,high,low1,high1,node);
+	if(low==low1&&high==high1)
+	{
+    	lazy[node]++;
+
+		return 0;
+
+	}
+	int mid=(low+high)/2;
+	if(high1<=mid)
+	{
+		return update(low,mid,low1,high1,node*2);
+	}
+	else
+	if(low1>mid)
+	{
+			return update(mid+1,high,low1,high1,node*2+1);
+	}
+	else
+	{
+		update(low,mid,low1,mid,node*2);
+		return update(mid+1,high,mid+1,high1,node*2+1);
+	}
+
+}
+int pre(int low,int high,int node)
+{
+	answ+=lazy[node];
+//	printf("segment\nlow:%d high:%d\n",low,high);
+	if(low==high)
+	{
+//		printf("processing %d answ:%lld\n",low,answ);
+		if(answ%2==1)
+		{
+			char c=a[low];
+			a[low]=a1[low];
+			a1[low]=c;
+
+		}
+		answ-=lazy[node];
+		return 0;
+	}
+	int mid=(low+high)/2;
+	pre(low,mid,node*2);
+	pre(mid+1,high,1+node*2);
+    answ-=lazy[node];
+
+
+}
+int main()
+{
+scanf("%d",&n);
+char c;
+scanf("%c",&c);
+scanf("%[a-z | A-Z | 0-9/-#,.@\r$\x0b\x0c()`/'|\\%^\t*~()\"{}!&:;<>?-_+=]", a);
+//printf("%s\n",a);
+scanf("%c",&c);
+scanf("%[a-z | A-Z | 0-9/-#,.@\r$\x0b\x0c()`/'|\\%^\t*~()\"{}!&:;<>?-_+=]", a1);
+//printf("%s\n",a1);
+
+scanf("%d",&m);
+int i;
+for(i=0;i<m;i++)
+{
+	int beg,end;
+	scanf("%d%d",&beg,&end);
+	update(0,n-1,beg,end,1);
+
+}
+pre(0,n-1,1);
+printf("%s\n",a);
+printf("%s\n",a1);
+return 0;
+
+}

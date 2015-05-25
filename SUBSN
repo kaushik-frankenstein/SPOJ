@@ -1,0 +1,117 @@
+#include<stdio.h>
+#include<iostream>
+#include<vector>
+using namespace std;
+int bin(int low,int high,vector<int> v[26],int index,int fin_ind)
+{
+	if(low>high)
+		return -1;
+	if(low==high)
+	{
+		if(v[index][low]>=fin_ind)
+			return v[index][low];
+		else
+			return -1;
+	}
+	int mid=(low+high)/2;
+	if(fin_ind>v[index][high])
+		return -1;
+//	printf("low:%d high:%d char:%c from:%d\n",low,high,index+97,fin_ind);
+	if(fin_ind>v[index][mid])
+	{
+		if(mid+1<=high&&v[index][mid+1]>fin_ind)
+			return v[index][mid+1];
+		return bin(mid+1,high,v,index,fin_ind);
+
+	}
+	else
+	if(fin_ind<v[index][mid])
+	{
+		if(mid-1>=low&&v[index][mid-1]<fin_ind)
+			return v[index][mid];
+		return bin(low,mid,v,index,fin_ind);
+	}
+	else
+		return v[index][mid];
+
+
+
+}
+int main()
+{
+	int t;
+	scanf("%d",&t);
+	char c;
+	scanf("%c",&c);
+	int case1=1;
+	while(t--)
+	{
+		char a[100001];
+		int ind1=0;
+		while(1)
+		{
+			scanf("%c",&c);
+			if(c=='\n')
+				break;
+			a[ind1++]=c;
+		}
+		a[ind1]='\0';
+		vector<int> v[26];
+		int i;
+		for(i=0;a[i]!='\0';i++)
+		{
+			v[a[i]-97].push_back(i);
+		}
+		char a1[201];
+		int q;
+		scanf("%d",&q);
+		scanf("%c",&c);
+		int fin=0;
+		printf("Case %d:\n",case1);
+		for(i=0;i<q;i++)
+		{
+			int ind=0;
+			while(1)
+			{
+			    scanf("%c",&c);
+			    if(c=='\n')
+			    	break;
+			    a1[ind++]=c;
+
+
+			}
+			a1[ind]='\0';
+            if(ind==0)
+            {
+            	printf("YES\n");
+            	continue;
+            }
+			int j;
+		    fin=0;
+			for(j=0;a1[j]!='\0';j++) 
+			{
+
+				fin=bin(0,v[a1[j]-97].size()-1,v,a1[j]-97,fin);
+                if(fin!=-1)
+				 fin++;
+				else
+					break;
+//				printf("fin:%d\n",fin);
+
+
+
+			}
+		if(fin==-1)
+			printf("NO\n");
+		else
+			printf("YES\n");
+
+
+
+		}
+
+		case1++;
+
+	}
+	return 0;
+}

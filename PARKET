@@ -1,0 +1,37 @@
+#include<stdio.h>
+int main()
+{
+	int r,d;
+	scanf("%d%d",&r,&d);
+	int i,j,k;
+	int ans=1;
+	for(i=0;i<=r&&ans;i++)
+	{
+		int total=i+d;
+//		printf("total number of blocks we have:%d\n",total);
+		int cond=total/2;
+		if(total==1)
+			cond=total;
+		for(j=1;j<=cond;j++)
+		{
+
+			if(total%j!=0)
+				continue;
+			int height=j;
+			int width=total/j;
+//            printf("height:%d width:%d\n",height,width);
+			if((height+1+width+1)*2==(r-i))
+			{
+				if(height>width)
+				 printf("%d %d\n",height+2,width+2);
+			    else
+			    	printf("%d %d\n",width+2,height+2);
+				ans=0;
+				break;
+			}
+
+
+		}
+	}
+	return 0;
+}

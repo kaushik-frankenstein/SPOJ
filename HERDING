@@ -1,0 +1,49 @@
+#include<stdio.h>
+char inp[1001][1001];
+int visited[1001][1001];
+int n,m;
+int conn1(int i,int j,int count)
+{
+//    printf("i:%d j:%d\n",i,j);
+    if(visited[i][j]<count&&visited[i][j]!=0)
+     return 0;
+     if(visited[i][j]==count)
+      return 1;
+    visited[i][j]=count;
+    
+    if(inp[i][j]=='N')
+     return conn1(i-1,j,count);
+    else
+    if(inp[i][j]=='E')
+     return conn1(i,j+1,count);
+    else
+    if(inp[i][j]=='S')
+     return conn1(i+1,j,count);
+    else
+     return conn1(i,j-1,count);
+}
+int conn()
+{
+ int i,j,ans=0,count=1;
+ for(i=0;i<n;i++)
+ {
+  for(j=0;j<m;j++)
+  {
+   if(visited[i][j]==0)
+   {
+    ans+=conn1(i,j,count);
+    ++count;
+   }
+  }
+ }   
+ return ans;
+}
+int main()
+{
+    scanf("%d%d",&n,&m);
+    int i;
+    for(i=0;i<n;i++)
+     scanf("%s",inp[i]);
+    printf("%d\n",conn());
+    return 0;
+}

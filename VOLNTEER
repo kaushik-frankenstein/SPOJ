@@ -1,0 +1,131 @@
+#include<bits/stdc++.h>
+#define LL long long int
+#define INF 1e9+30
+using namespace std;
+LL maxim(LL e1,LL e2)
+{
+	return e1>e2?e1:e2;
+
+}
+class cmp
+{
+public:
+	bool operator()(const int& i1,const int& i2)
+	{
+		return i1<i2;
+
+	}
+};
+class cmp1
+{
+public:
+	bool operator()(const int& i1,const int& i2)
+	{
+		return i1>i2;
+
+	}
+};
+
+int main()
+{
+	int n,k;
+	scanf("%d%d",&n,&k);
+	int i,pos_size=0,neg_size=0;
+	priority_queue<LL,vector<LL>,cmp > max;
+	priority_queue<LL,vector<LL>,cmp > min;
+	priority_queue<LL,vector<LL>,cmp > max1;
+	
+	LL ele;
+	for(i=0;i<n;i++)
+	{
+		scanf("%lld",&ele);
+		if(ele>=0)
+		{
+			max.push(ele);
+			pos_size++;
+		}
+		else
+			if(ele<0)
+			{
+				min.push((ele)*-1);
+				neg_size++;
+				max1.push(ele);
+			}
+
+
+	}
+	LL last_pos=INF,last_neg=INF,ele1,ele2,ans=0,ans1=0;
+	LL count=0;
+	LL pos_size1=pos_size,neg_size1=neg_size;
+	LL neg=0,pos=0;
+	for(i=0;i<k;i++)
+	{
+		ele1=0;
+		ele2=0;
+		if(pos_size1==0)
+		{
+			 ans1+=max1.top();
+			 max1.pop();
+		}
+		if(pos_size==0&&neg_size==0)
+			break;
+		if(pos_size!=0)
+	    	ele1=max.top();
+	    if(neg_size!=0)
+     		ele2=min.top();
+		if(ele1>=ele2)
+		{
+			pos+=ele1;
+//			printf("ele1:%lld\n",ele1);
+			last_pos=ele1;
+			max.pop();
+			pos_size--;
+		}
+		else
+		{
+			neg+=ele2;
+//			printf("ele1:%lld\n",ele2);
+
+			last_neg=ele2;
+			min.pop();
+			neg_size--;
+			count++;
+		}
+	}
+//	printf("last_pos:%lld last_neg:%lld\n",last_pos,last_neg);
+//	printf("pos:%lld neg:%lld\n",pos,neg);
+	if(k%2!=0&&pos_size1==0)
+	{
+		ans=ans1;
+	}
+	else
+	if(count%2!=0&&k!=n)
+	{
+		ans=neg+pos;
+		LL c1=-2*ans,c2=-2*ans;
+
+		if(neg_size!=0)
+			c1=min.top();
+		if(pos_size!=0)
+			c2=max.top();
+		if(last_pos!=INF&&last_neg!=INF)
+      		ans=maxim(ans-last_pos+c1,ans-last_neg+c2);
+      	else
+      		if(last_pos==INF)
+      			ans=ans-last_neg+c2;
+      	else
+      	if(last_neg==INF)
+      		ans=ans-last_pos+c1;
+//		printf("c1:%lld c2:%lld\n",c1,c2);
+//		ans=maxim(ans-last_pos+c1,ans-last_neg+c2);
+
+	}
+	else
+	if(count%2!=0&&k==n)
+			ans=-neg+pos;
+	else
+		if(count%2==0)
+			ans=neg+pos;
+	printf("%lld\n",ans);
+	return 0;
+}
